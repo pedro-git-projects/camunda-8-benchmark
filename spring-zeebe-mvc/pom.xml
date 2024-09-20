@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.nilptr</groupId>
-    <artifactId>Desafio</artifactId>
+    <artifactId>spring-zeebe-mvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Desafio</name>
-    <description>Desafio</description>
+    <name>Spring Zeebe MVC</name>
+    <description>Spring Zeebe MVC Benchmark Application</description>
     <url/>
     <licenses>
         <license/>
