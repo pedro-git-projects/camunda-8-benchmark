@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.nilptr</groupId>
-    <artifactId>Desafio</artifactId>
+    <artifactId>spring-zeebe-weblfux</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Desafio</name>
-    <description>Desafio</description>
+    <name>Spring Zeebe Webflux</name>
+    <description>Spring Zeebe Webflux Benchmark Application</description>
     <url/>
     <licenses>
         <license/>
