@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.consts;
+package dev.nilptr.spring.zeebe.mvc.consts;
 
 public enum PaymentStatus {
     REFUSED,

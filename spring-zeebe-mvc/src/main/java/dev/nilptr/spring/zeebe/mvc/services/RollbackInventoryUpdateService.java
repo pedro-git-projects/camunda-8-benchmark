@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.services;
+package dev.nilptr.spring.zeebe.mvc.services;
 
 import dev.nilptr.springzeebemvc.dtos.RollbackInventoryUpdateDto;
 import io.camunda.zeebe.client.ZeebeClient;

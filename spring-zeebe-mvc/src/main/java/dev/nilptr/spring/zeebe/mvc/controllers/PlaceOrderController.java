@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.controllers;
+package dev.nilptr.spring.zeebe.mvc.controllers;
 
 import dev.nilptr.springzeebemvc.dtos.PlaceOrderDto;
 import dev.nilptr.springzeebemvc.services.PlaceOrderService;

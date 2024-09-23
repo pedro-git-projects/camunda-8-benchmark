@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.services;
+package dev.nilptr.spring.zeebe.mvc.services;
 
 import dev.nilptr.springzeebemvc.consts.OrderStatus;
 import dev.nilptr.springzeebemvc.dtos.SendOrderConfirmationDto;

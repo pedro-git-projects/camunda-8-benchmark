@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.dtos;
+package dev.nilptr.spring.zeebe.mvc.dtos;
 
 import dev.nilptr.springzeebemvc.consts.PaymentStatus;
 import lombok.Getter;

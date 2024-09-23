@@ -1,4 +1,4 @@
-package dev.nilptr.springzeebemvc.workers;
+package dev.nilptr.spring.zeebe.mvc.workers;
 
 import dev.nilptr.springzeebemvc.dtos.RollbackInventoryUpdateDto;
 import dev.nilptr.springzeebemvc.services.RollbackInventoryUpdateService;
