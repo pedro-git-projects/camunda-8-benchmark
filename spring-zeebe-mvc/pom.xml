@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.nilptr</groupId>
     <artifactId>spring-zeebe-mvc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Spring Zeebe MVC</name>
-    <description>Spring Zeebe MVC Benchmark Application</description>
+    <name>spring-zeebe-mvc</name>
+    <description>spring-zeebe-mvc</description>
     <url/>
     <licenses>
         <license/>
@@ -20,6 +20,15 @@
     <developers>
         <developer/>
     </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>17</java.version>
+    </properties>
     <repositories>
         <repository>
             <releases>
@@ -33,22 +42,17 @@
             <url>https://artifacts.camunda.com/artifactory/camunda-identity/</url>
         </repository>
     </repositories>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
-    <properties>
-        <java.version>17</java.version>
-    </properties>
     <dependencies>
         <dependency>
-            <groupId>io.camunda.spring</groupId>
-            <artifactId>spring-boot-starter-camunda</artifactId>
-            <version>8.5.2</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -59,18 +63,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <scope>runtime</scope>
+            <groupId>io.camunda.spring</groupId>
+            <artifactId>spring-boot-starter-camunda</artifactId>
+            <version>8.5.2</version>
         </dependency>
     </dependencies>
 
@@ -86,6 +83,15 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
