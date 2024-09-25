@@ -2,6 +2,7 @@ package dev.nilptr.springzeebesync.workers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.nilptr.springzeebesync.dtos.PlaceOrderDto;
+import dev.nilptr.springzeebesync.dtos.ProcessPaymentDto;
 import dev.nilptr.springzeebesync.services.ProcessPaymentService;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
@@ -40,38 +41,36 @@ public class ProcessPaymentWorker {
 
         log.info("Received variables: " + placeOrderDto.toString());
 
-        processPaymentService.processPayment(placeOrderDto)
-                .thenCompose(dto -> {
-                    log.info("Payment processed successfully, attempting to complete the job for order: " + placeOrderDto.getOrderId());
-                    log.info("Sending completion command with variables: " + dto.toVariableMap());
+        try {
+            // Process the payment synchronously
+            ProcessPaymentDto dto = processPaymentService.processPayment(placeOrderDto);
 
-                    return client.newCompleteCommand(job.getKey())
-                            .variables(dto.toVariableMap())
-                            .send()
-                            .toCompletableFuture();
-                })
-                .thenAccept(response -> {
-                    jobCompletionCount++;
-                    log.info("Successfully completed job for order: " + placeOrderDto.getOrderId());
-                    if (jobCompletionCount >= targetJobCount) {
-                        long endTime = System.currentTimeMillis();
-                        calculateThroughput(endTime);
-                        jobCompletionCount = 0; // resetar para o próximo batch
-                    }
-                })
-                .exceptionally(throwable -> {
-                    log.error("Failed to complete job: " + throwable.getMessage());
+            log.info("Payment processed successfully, completing the job for order: " + placeOrderDto.getOrderId());
+            log.info("Sending completion command with variables: " + dto.toVariableMap());
 
-                    client.newFailCommand(job.getKey())
-                            .retries(job.getRetries() - 1)
-                            .errorMessage(throwable.getMessage())
-                            .send()
-                            .exceptionally(failThrowable -> {
-                                log.error("Failed to fail job: " + failThrowable.getMessage());
-                                return null;
-                            });
-                    return null;
-                });
+            client.newCompleteCommand(job.getKey())
+                    .variables(dto.toVariableMap())
+                    .send()
+                    .join();
+
+            jobCompletionCount++;
+            log.info("Successfully completed job for order: " + placeOrderDto.getOrderId());
+
+            if (jobCompletionCount >= targetJobCount) {
+                long endTime = System.currentTimeMillis();
+                calculateThroughput(endTime);
+                jobCompletionCount = 0;
+            }
+
+        } catch (Exception e) {
+            log.error("Failed to process or complete job: " + e.getMessage());
+
+            client.newFailCommand(job.getKey())
+                    .retries(job.getRetries() - 1)
+                    .errorMessage(e.getMessage())
+                    .send()
+                    .join();  // Ensures the fail command is sent synchronously
+        }
 
         log.info("Processing payment for order: " + placeOrderDto.getOrderId());
     }
@@ -80,7 +79,6 @@ public class ProcessPaymentWorker {
         long totalTimeMillis = endTime - startTime;
         double totalTimeSeconds = totalTimeMillis / 1000.0;
 
-        // Throughput: n jobs completed per second
         double jobsPerSecond = targetJobCount / totalTimeSeconds;
         log.info("Throughput: {} jobs per second for the last {} jobs", jobsPerSecond, targetJobCount);
 
@@ -91,7 +89,6 @@ public class ProcessPaymentWorker {
 
         dumpThroughputDataToFile();
     }
-
 
     private void dumpThroughputDataToFile() {
         File file = new File("throughput-data-batch.json");
